@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <meta charset="utf-8">
+      <title>E2 Q3.1</title>
+      <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+      <style>
+
+      body{
+        color:black
+      }
+      #spreadsheet{
+        height:700px;
+        width:700px;
+      }
+      table{
+        height:600px;
+        width:600px;
+        text-align:right;
+      }
+      th{
+        background-color:lightgrey;
+      }
+      tr{
+        background-color:white;
+      }
+      tr:hover{
+        background-color:yellow;
+      }
+
+
+      </style>
+
+</head>
+<body>
+    <script>
+    /*Establish Variables*/
+        var h = 1200;
+        var w = 1200;
+
+        d3.select("body")
+          .append("div")
+          .attr("id", "spreadsheet")
+          .style("height", h)
+          .style("width", w);
+
+        d3.select("#spreadsheet").append("table");
+
+        table = d3.select("table");
+
+        table.append("thead");
+
+        table.append("tbody");
+
+      d3.json("https://hivelab.org/static/exam2.json", function(error, data){
+        var matrix = data;
+
+        var thead = table.select("thead")
+          .selectAll("th")
+          .data(d3.keys(matrix[0]))
+          .enter()
+          .append("th")
+          .text(function(d){return d});
+
+        var tr = table.select("tbody")
+          .selectAll("tr")
+          .data(matrix)
+          .enter()
+          .append("tr")
+          .on("click", function(){
+              function changeColor (){if (this.style.background-color == "white"){
+                  return "green"}
+                  else{
+                    return "white"
+                  };}
+              d3.select(this).style( "background-color", changeColor)
+            })
+            ;
+
+        var td = tr.selectAll("td")
+          .data(function (d) { return d3.values(d);})
+          .enter()
+          .append("td")
+          .text(function (d) { return d});
+
+
+      });
+/*This author gratefully acknowledges the labors of the following in the creation of this visualization:
+https://gist.github.com/LevelbossMike/2623382
+https://github.com/mbostock/d3/wiki/Selections
+http://stackoverflow.com/questions/10939082/d3-javascript-alternate-colors-on-click
+*/
+    </script>
+</body>
+</html>
