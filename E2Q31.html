@@ -4,11 +4,12 @@
       <meta charset="utf-8">
       <title>E2 Q3.1</title>
       <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-      <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
-      <style>
+            <style>
 
       body{
         color:black
+        margin-left: 40px;
+        margin-top: 40px;
       }
       #spreadsheet{
         height:700px;
@@ -54,6 +55,7 @@
         table.append("tbody");
 
       d3.json("https://hivelab.org/static/exam2.json", function(error, data){
+    /*  d3.json("exam2.json", function(error, data){*/
         var matrix = data;
 
         var thead = table.select("thead")
@@ -68,15 +70,23 @@
           .data(matrix)
           .enter()
           .append("tr")
+          .on("mouseover", function(){
+            if (d3.select(this).classed("active") === true){
+                d3.select(this).style("background-color", "#339933" )}
+              else{
+                d3.select(this).style("background-color", "yellow");}
+              })
+          .on("mouseout", function(){
+            if (d3.select(this).classed("active") === true){
+                d3.select(this).style("background-color", "#33cc33");}
+              else if (d3.select(this).classed("active") === false){
+                d3.select(this).style("background-color", "white");}}
+              )
           .on("click", function(){
-              function changeColor (){if (this.style.background-color == "white"){
-                  return "green"}
-                  else{
-                    return "white"
-                  };}
-              d3.select(this).style( "background-color", changeColor)
-            })
-            ;
+              d3.selectAll("tr").style("background-color", "white").classed('active', false);
+              d3.select(this).style("background-color", "#336633").classed('active', true);
+            });
+;
 
         var td = tr.selectAll("td")
           .data(function (d) { return d3.values(d);})
@@ -90,7 +100,12 @@
 https://gist.github.com/LevelbossMike/2623382
 https://github.com/mbostock/d3/wiki/Selections
 http://stackoverflow.com/questions/10939082/d3-javascript-alternate-colors-on-click
+http://jaketrent.com/post/d3-class-operations/
 */
     </script>
+    <div>
+      <p>Author: Katie Ernst</p>
+      <p> Data from https://hivelab.org/static/exam2.json</p>
+
 </body>
 </html>
