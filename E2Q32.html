@@ -60,9 +60,9 @@
 
         matrix.forEach(function(d, i){
 
-          d.alph = d3.keys(d[i]);
+          d.alph = d3.keys(d);//This is supposed to add the alpha character  to each element as a proprty
           console.log(d.alph);
-
+          d.item = ; //this is something to attach the item info to each element
         })
         xScale.domain(data.map(function(d){return d3.keys(matrix[0]);}));
         /*yScale.domain(data.map(function(d){return }));*/
@@ -92,9 +92,9 @@
           .data(function(d){return d3.values(d)})
           .enter()
           .append("rect")
-          .attr("width", xScale.rangeBand())
+          .attr("width", xScale.rangeBand()) // height and width are both specified with the rangeRound Bands
           .attr("height", yScale.rangeBand())
-          .attr("y", function(d,i){ return d[i]})
+          .attr("y", function(d,i){ return d[i]}) //only needed to determine height
           .style("fill", "white");
 
 
