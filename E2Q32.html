@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <meta charset="utf-8">
+      <title>Katie Ernst Q3.2</title>
+      <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+            <style>
+
+      body{
+        color:black
+        margin-left: 40px;
+        margin-top: 40px;
+      }
+      #spreadsheet{
+        height:700px;
+        width:700px;
+      }
+      .x.axis path {
+        display: none;
+      }
+      .axis path, .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+
+
+
+      </style>
+
+</head>
+<body>
+    <script>
+    /*Establish Variables*/
+        var margin = {top: 20, right:20, left: 40, right: 40};
+        var h = 1200 - margin.top-margin.bottom;
+        var w = 1200 - margin.left - margin.right;
+
+        var xScale = d3.scale.ordinal()
+            .rangeRoundBands([0, w], .1);
+
+        var yScale = d3.scale.ordinal()
+            .rangeRoundBands([0, h], .1);
+
+        var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("top");
+
+        var canvas = d3.select("body").append("svg")
+            .attr("width", w + margin.left + margin.right)
+            .attr("height", h + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var active;
+
+      d3.json("https://hivelab.org/static/exam2.json", function(error, data){
+    /*  d3.json("exam2.json", function(error, data){*/
+        var matrix = data;
+
+        matrix.forEach(function(d, i){
+
+          d.alph = d3.keys(d[i]);
+          console.log(d.alph);
+
+        })
+        xScale.domain(data.map(function(d){return d3.keys(matrix[0]);}));
+        /*yScale.domain(data.map(function(d){return }));*/
+
+        canvas.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0, 10)")
+            .call(xAxis)
+            .attr("fill", "lightgrey")
+            .selectAll("text")
+            .style("text-anchor", "middle")
+            .attr("dx", "-1em")
+            .attr("dy", "-.6em")
+            .text(function(d){return d})
+            .on("click", function(){
+              sortSheet()
+            });
+
+        var alphA = canvas.selectAll(".alphA")
+          .data(matrix)
+          .enter()
+          .append("g")
+          .attr("class", "alphA")
+          .attr("transform", function(d){return "translate(" + xScale(d.alph) + ",0";})
+
+        alphA.selectAll("rect")
+          .data(function(d){return d3.values(d)})
+          .enter()
+          .append("rect")
+          .attr("width", xScale.rangeBand())
+          .attr("height", yScale.rangeBand())
+          .attr("y", function(d,i){ return d[i]})
+          .style("fill", "white");
+
+
+          var sortSheet = function(){
+            d3.selectAll("rect")
+            .sort(function(a,b){
+              return d3.ascending(a.values, b.values);
+
+            })
+          }
+
+        });
+
+
+    /*
+
+        var thead = table.select("thead")
+          .selectAll("th")
+          .data(d3.keys(matrix[0]))
+          .enter()
+          .append("th")
+          .text(function(d){return d})
+          .on("click", function(){
+
+            sortSheet();});
+
+        var sortSheet = function(){
+          console.log(this.value);
+          d3.selectAll("tbody")
+            .sort(function(a, b){
+              return d3.descending(a.this, b.this);
+            })
+        };
+
+
+        var tr = table.select("tbody")
+          .selectAll("tr")
+          .data(matrix)
+          .enter()
+          .append("tr")
+          .on("mouseover", function(){
+            if (d3.select(this).classed("active") === true){
+                d3.select(this).style("background-color", "#339933" )}
+              else{
+                d3.select(this).style("background-color", "yellow");}
+              })
+          .on("mouseout", function(){
+            if (d3.select(this).classed("active") === true){
+                d3.select(this).style("background-color", "#33cc33");}
+              else if (d3.select(this).classed("active") === false){
+                d3.select(this).style("background-color", "white");}}
+              )
+          .on("click", function(){
+              d3.selectAll("tr").style("background-color", "white").classed('active', false);
+              d3.select(this).style("background-color", "#336633").classed('active', true);
+            });
+;
+
+        var td = tr.selectAll("td")
+          .data(function (d) { return d3.values(d);})
+          .enter()
+          .append("td")
+          .text(function (d) { return d});
+
+*/
+
+/*This author gratefully acknowledges the labors of the following in the creation of this visualization:
+https://gist.github.com/LevelbossMike/2623382
+https://github.com/mbostock/d3/wiki/Selections
+http://stackoverflow.com/questions/10939082/d3-javascript-alternate-colors-on-click
+http://jaketrent.com/post/d3-class-operations/
+https://leanpub.com/D3-Tips-and-Tricks/read
+http://bl.ocks.org/mbostock/3886208
+*/
+    </script>
+    <div>
+      <p>Author: Katie Ernst</p>
+      <p> Data from https://hivelab.org/static/exam2.json</p>
+
+</body>
+</html>
